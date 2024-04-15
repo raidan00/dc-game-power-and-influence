@@ -4,7 +4,7 @@ import ammoTmp from 'dvijcock/ammoTmp.js';
 THREE.Object3D.prototype.addDcData = function(par = {}){
 	if(!par.btShape){
 		if(this.geometry.type === 'SphereGeometry'){
-			par.btShape = new Ammo.btSphereShape(this.geometry.parameters.radius);
+			par.btShape = new Ammo.btSphereShape(this.scale.x);
 		}else if(this.geometry.type === 'BoxGeometry'){
 			par.btShape = new Ammo.btBoxShape(ammoTmp.vec(this.scale.x*0.5, this.scale.y*0.5, this.scale.z*0.5));
 		}else if(this.geometry.type === 'CylinderGeometry'){
