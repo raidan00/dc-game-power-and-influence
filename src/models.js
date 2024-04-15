@@ -6,10 +6,10 @@ const models = {};
 export default models;
 async function loadModel(name){
 	let model = await loader.loadAsync(`./models/${name}.glb`);
-	models[name] = model.scene.children[0];
+	models[name] = model.scene;
 }
 export function loadModels(){
 	return Promise.all([
-		loadModel("circular saw"),
+		loadModel("Cross Ball"),
 	])
 }

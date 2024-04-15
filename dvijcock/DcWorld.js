@@ -62,6 +62,8 @@ export default class {
 
 		rbody.setFriction(objThree.dcData.setFriction || config.setFriction);
 		rbody.setRestitution(objThree.dcData.setRestitution || config.setRestitution);
+		rbody.setRollingFriction(objThree.dcData.setRollingFriction || config.setRollingFriction);
+
 		if(objThree.dcData.kinematic){
 			rbody.setActivationState(4);
 			rbody.setCollisionFlags(2);
