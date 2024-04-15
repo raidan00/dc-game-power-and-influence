@@ -13,6 +13,10 @@ export default class{
 		let controls = new OrbitControls(dc.camera, dc.renderer.domElement);
 		controls.enablePan = false;
 
+		let cameraGroup = new t.Group();	
+		cameraGroup.add(dc.camera);
+		dc.scene.add(cameraGroup);
+
 		dc.scene.add(defaultLights);
 
 		const platform = new t.Mesh( new t.BoxGeometry(), new t.MeshStandardMaterial({color: 0x13d013}) );
@@ -28,8 +32,11 @@ export default class{
 		ball.addDcData({
 			btShape: new Ammo.btSphereShape(1),
 			mass: 1,
-			tickDispayFps(delta){
-				//model.rotation.y -= delta*3;
+			tickBeforePhysics(delta){
+			},
+			tickAfterPhysics(delta){
+				cameraGroup.position.copy(ball.position);	
+				dc.camera.lookAt(ball.position);
 			}
 		});
 		dc.addObj(ball);

@@ -25,9 +25,9 @@ export default class {
 		let tickDispayFps =()=>{
 			if(this.destroyed) return;
 			let deltaTime = clock.getDelta();
-			if(gameLogic.tickDispayFps)gameLogic.tickDispayFps(deltaTime);
-			this.tickDispayFps(deltaTime);
+			this.tickBeforePhysics(deltaTime);
 			this.updateDynamic(deltaTime);
+			this.tickAfterPhysics(deltaTime);
 			this.renderer.render( this.scene, this.camera );
 			requestAnimationFrame(tickDispayFps);
 		};
@@ -85,16 +85,31 @@ export default class {
 		}
 		addRecursion(objThree);
 	}
-	tickDispayFps(deltaTime){
+	tickAfterPhysics(deltaTime){
 		let arr = [];
 		this.scene.traverse((objThree)=>{
-			if(objThree?.dcData?.tickDispayFps)arr.push(objThree);
+			if(objThree?.dcData?.tickAfterPhysics)arr.push(objThree);
 		});
 		for(let el of arr){
-			if(typeof el.dcData.tickDispayFps == 'function'){
-				el.dcData.tickDispayFps(deltaTime);
+			if(typeof el.dcData.tickAfterPhysics == 'function'){
+				el.dcData.tickAfterPhysics(deltaTime);
 			}else{
-				for(let func of el.dcData.tickDispayFps){
+				for(let func of el.dcData.tickAfterPhysics){
+					func(deltaTime);
+				}
+			}
+		}
+	}
+	tickBeforePhysics(deltaTime){
+		let arr = [];
+		this.scene.traverse((objThree)=>{
+			if(objThree?.dcData?.tickBeforePhysics)arr.push(objThree);
+		});
+		for(let el of arr){
+			if(typeof el.dcData.tickBeforePhysics == 'function'){
+				el.dcData.tickBeforePhysics(deltaTime);
+			}else{
+				for(let func of el.dcData.tickBeforePhysics){
 					func(deltaTime);
 				}
 			}

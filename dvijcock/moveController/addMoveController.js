@@ -6,7 +6,7 @@ import ammoTmp from "dvijcock/ammoTmp.js"
 export default function (objThree, controls, pushForce, maxSpeed){
 	pushForce *= 1000;
 	objThree.dcData.rbody.setActivationState(4)
-	objThree.dcData.tickDispayFps=[objThree.dcData.tickDispayFps, (delta)=>{
+	objThree.dcData.tickBeforePhysics=[objThree.dcData.tickBeforePhysics, (delta)=>{
 		if(moveDirection.forward == 0 && moveDirection.right  == 0) return;
 		let pushAng = moveDirection.angle - controls.getAzimuthalAngle() - Math.PI/2;
 		var pushVec = new t.Vector2( Math.cos(pushAng), Math.sin(pushAng) );
