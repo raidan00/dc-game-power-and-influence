@@ -6,7 +6,7 @@ import ammoTmp from "dvijcock/ammoTmp.js"
 export default function (objThree, controls, pushForce, maxSpeed){
 	pushForce *= 1000;
 	objThree.dcData.rbody.setActivationState(4)
-	objThree.dcData.tickBeforePhysics=[objThree.dcData.tickBeforePhysics, (delta)=>{
+	function tickBeforePhysics(delta){
 		if(moveDirection.forward == 0 && moveDirection.right  == 0) return;
 		let pushAng = moveDirection.angle - controls.getAzimuthalAngle() - Math.PI/2;
 		var pushVec = new t.Vector2( Math.cos(pushAng), Math.sin(pushAng) );
@@ -20,7 +20,12 @@ export default function (objThree, controls, pushForce, maxSpeed){
 		};
 		pushVec.multiplyScalar(pushForce*delta*moveDirection.touchFactor);
 		objThree.dcData.rbody.applyCentralForce(ammoTmp.vec(pushVec.x, 0, pushVec.y));
-	}];
+	}
+	if(!objThree.dcData.tickBeforePhysics){
+		objThree.dcData.tickBeforePhysics = tickBeforePhysics;
+	}else{
+		objThree.dcData.tickBeforePhysics = [objThree.dcData.tickBeforePhysics, tickBeforePhysics];
+	}
 	const div = document.createElement('div');
 	div.className = 'dvijcock-conroller';
 	document.body.appendChild(div);
