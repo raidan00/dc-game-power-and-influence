@@ -12,10 +12,6 @@ THREE.Object3D.prototype.addDcData = function(par = {}){
 		}
 	}
 	par.btShape.setMargin(0.05);
-
-	if( !("setFriction" in par) ) par.setFriction = 0.5;
-	if( !("setRestitution" in par) ) par.setRestitution = 0.1;
-
 	this.dcData = par;
 }
 export default {}

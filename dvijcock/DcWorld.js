@@ -2,6 +2,7 @@ import * as t from 'three';
 import renderer from "dvijcock/single/renderer.js"
 import Resizer from "dvijcock/Resizer.js"
 import ammoTmp from 'dvijcock/ammoTmp.js';
+import config from "dvijcock/config.js";
 
 export default class {
 	constructor(){ 
@@ -59,8 +60,8 @@ export default class {
 		let rbody = new Ammo.btRigidBody(rbInfo);
 		rbInfo.__destroy__();
 
-		rbody.setFriction(objThree.dcData.setFriction);
-		rbody.setRestitution(objThree.dcData.setRestitution);
+		rbody.setFriction(objThree.dcData.setFriction || config.setFriction);
+		rbody.setRestitution(objThree.dcData.setRestitution || config.setRestitution);
 		if(objThree.dcData.kinematic){
 			rbody.setActivationState(4);
 			rbody.setCollisionFlags(2);
