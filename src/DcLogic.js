@@ -20,7 +20,7 @@ export default class{
 
 		dc.scene.add(defaultLights);
 
-		const platform = new t.Mesh( new t.BoxGeometry(), new t.MeshStandardMaterial({color: 0x13d013}) );
+		const platform = new t.Mesh( new t.BoxGeometry(), new t.MeshStandardMaterial({color: 0x874a1c}) );
 		platform.scale.set(100, 1, 100);
 		platform.addDcData({
 			mass: 0,
