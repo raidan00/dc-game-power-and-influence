@@ -57,7 +57,7 @@ export default class{
 		ring.rotation.x = -Math.PI/2;
 		ring.dcData = {
 			tickAfterPhysics(delta){
-				ring.position.set(player.position.x,1.11,player.position.z)
+				ring.position.set(player.position.x, 1.2, player.position.z)
 			}
 		}
 

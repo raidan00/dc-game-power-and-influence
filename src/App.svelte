@@ -1,5 +1,6 @@
 <script>
 	import Game from './Game.svelte';
+	import Back from './Back.svelte';
 	import SelectLevel from './SelectLevel.svelte';
 	import { lvl } from './store.js';
 </script>
@@ -8,5 +9,6 @@
 	<SelectLevel/>
 {:else}
 	<Game/>
+	<Back/>
 {/if}
 
