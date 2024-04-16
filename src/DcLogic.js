@@ -37,22 +37,37 @@ export default class{
 		});
 		dc.addObj(voteBox);
 
-		let ball = models["Cross Ball"].clone();
-		ball.position.set(0,5,0)
-		ball.addDcData({
+		let player = models["Cross Ball"].clone();
+		player.position.set(0,1.6,0)
+		player.addDcData({
 			btShape: new Ammo.btSphereShape(1),
 			mass: 1,
 			tickAfterPhysics(delta){
-				cameraGroup.position.copy(ball.position);	
-				dc.camera.lookAt(ball.position);
+				cameraGroup.position.copy(player.position);	
+				dc.camera.lookAt(player.position);
 			}
 		});
-		dc.addObj(ball);
-		addMoveController(ball, controls, 0.5, 3);
+		dc.addObj(player);
+		addMoveController(player, controls, 0.5, 3);
 
+		let powerRange = 3;
+		const ring = new t.Mesh(new t.RingGeometry(0.9, 1, 30 ), new t.MeshStandardMaterial({color: "green"}) );
+		ring.scale.set(powerRange,powerRange,powerRange);
+		ring.position.set(0,1.6,0)
+		ring.rotation.x = -Math.PI/2;
+		ring.dcData = {
+			tickAfterPhysics(delta){
+				ring.position.set(player.position.x,1.11,player.position.z)
+			}
+		}
+
+		//ring.scale.set(10, 1.2, 10);
+		dc.scene.add(ring);
+
+		
 		if(lvl == 0){
 			const voter = new t.Mesh( new t.SphereGeometry(), new t.MeshStandardMaterial({color: "grey"}) );
-			voter.position.set(0,1,-14);
+			voter.position.set(0,1.2,-14);
 			let size = 0.7
 			voter.scale.set(size,size,size);
 			voter.addDcData({
