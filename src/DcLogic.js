@@ -1,6 +1,6 @@
 import * as t from "three"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { ammoTmp, defaultLights, addMoveController, arrowHelper } from 'dvijcock';
+import { ammoTmp, defaultLights, MoveController, arrowHelper } from 'dvijcock';
 import models from "./models.js";
 import { lvl as tmpLvl} from './store.js';
 import {get as storeGet} from 'svelte/store';
@@ -48,7 +48,7 @@ export default class{
 			}
 		});
 		dc.addObj(player);
-		addMoveController(player, controls, 0.5, 3);
+		this.moveController = new MoveController(player, controls, 0.5, 3);
 
 		let powerRange = 3;
 		const ring = new t.Mesh(new t.RingGeometry(0.9, 1, 30 ), new t.MeshStandardMaterial({color: "green"}) );
@@ -76,5 +76,8 @@ export default class{
 			dc.addObj(voter);
 			arrowHelper("Keep voter in your power range. Until he reach vote box", models.Arrow, player, voter, 4);
 		}
+	}
+	destroy(){
+		this.moveController.destroy();
 	}
 };

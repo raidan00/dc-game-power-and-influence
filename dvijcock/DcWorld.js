@@ -15,6 +15,7 @@ export default class {
 		this.domEl = domEl;
 	}
 	setLogic(gameLogic){
+		this.gameLogic = gameLogic;
 		gameLogic.dcWorld = this;
 		gameLogic.init();
 
@@ -153,6 +154,7 @@ export default class {
 	destroy(){
 		if(this.destroyed) return;
 		this.destroyed = true;
+		if(this.gameLogic.destroy)this.gameLogic.destroy();
 		this.resizer.destory();
 		//clearInterval(this.updatePhysicsInterval);
 		this.scene.traverse((objThree)=>{
