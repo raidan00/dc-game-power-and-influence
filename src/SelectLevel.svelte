@@ -10,7 +10,7 @@
 	<div class="text">
 		You need win election. You have power and influence that have different effect on voters. Your opponent have only influence.
 	</div>
-	<div class="lelves">
+	<div class="levels">
 		levels:
 	</div>
 	<button on:click={()=>reset(0)}>
@@ -25,6 +25,9 @@
 	<button on:click={()=>reset(3)}>
 		3
 	</button>
+	<button on:click={()=>reset(3)}>
+		fraud
+	</button>
 </div>
 
 <style>
@@ -35,5 +38,10 @@
 		background: #cacff9;
 		border-radius: 10px;
 		padding: 10px;
+	}
+	.levels {
+		font-size: 22px;
+		color: black;
+		text-shadow: 2px 2px 4px #ffffff;
 	}
 </style>
