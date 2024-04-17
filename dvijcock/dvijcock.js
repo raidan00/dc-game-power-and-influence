@@ -5,4 +5,4 @@ export { default as ammoTmp } from "dvijcock/ammoTmp.js";
 export { default as defaultLights } from "dvijcock/defaultLights.js";
 export { default as MoveController } from "dvijcock/moveController/MoveController.js";
 export { default as config } from "dvijcock/config.js";
-export { default as arrowHelper } from "dvijcock/helpers/arrowHelper.js";
+export { default as ArrowHelper } from "dvijcock/helpers/ArrowHelper.js";
