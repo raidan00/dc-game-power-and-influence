@@ -54,7 +54,7 @@ export default class{
 
 		let powerRange = 3;
 		if(lvl == 0)powerRange=5;
-		const ring = new t.Mesh(new t.RingGeometry(0.9, 1, 30 ), new t.MeshBasicMaterial({color: 0x0f9633}) );
+		const ring = new t.Mesh(new t.RingGeometry(0.9, 1, 60 ), new t.MeshBasicMaterial({color: 0x0f9633}) );
 		ring.scale.set(powerRange,powerRange,powerRange);
 		ring.position.set(0,1.6,0)
 		ring.rotation.x = -Math.PI/2;
