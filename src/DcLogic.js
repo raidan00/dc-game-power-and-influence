@@ -53,6 +53,7 @@ export default class{
 		this.moveController = new MoveController(player, controls, 0.5, 3);
 
 		let powerRange = 3;
+		if(lvl == 0)powerRange=5;
 		const ring = new t.Mesh(new t.RingGeometry(0.9, 1, 30 ), new t.MeshBasicMaterial({color: 0x0f9633}) );
 		ring.scale.set(powerRange,powerRange,powerRange);
 		ring.position.set(0,1.6,0)
@@ -66,14 +67,30 @@ export default class{
 
 		if(lvl == 0){
 			const voter = new t.Mesh( new t.SphereGeometry(), new t.MeshStandardMaterial({color: "grey"}) );
-			voter.position.set(0,1.2,-14);
+			//const voter = new t.Mesh( new t.SphereGeometry(), new t.MeshStandardMaterial({color: 0xE7008F}) );
+			voter.position.set(-1,1.2,-15);
 			let size = 0.7
 			voter.scale.set(size,size,size);
 			voter.dcData = {
 				btShape: true,
 				mass: .1,
+				side: "neutral",
+				tickAfterPhysics(delta){
+					if(this.side == "opponent")return;
+					this.side = "my";
+					let distance = voter.position.distanceTo(player.position);
+					if(distance > powerRange + size)return;
+					let velocity = voter.dcData.rbody.getLinearVelocity();
+					let velVec = new t.Vector2(velocity.x(), velocity.z());
+					if(velVec.length()>3)return;
+					voter.material.color.setHex(0xE7008F);
+					let pushVec = new t.Vector2(voter.position.x, voter.position.z).normalize().multiplyScalar(-delta*50);
+					voter.dcData.rbody.applyCentralForce(ammoTmp.vec(pushVec.x, 0, pushVec.y));
+
+				},
 			};
 			dc.addObj(voter);
+			voter.dcData.rbody.setActivationState(4);
 			this.arrowHelper = new ArrowHelper("Keep voter in your power range ring. Until he reach vote box",
 				models.Arrow, player, voter, 4);
 		}
