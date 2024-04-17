@@ -23,6 +23,7 @@ a:hover {
 }
 
 body {
+	background: #0089B9;
 	user-select: none;
 	margin: 0;
 	display: flex;

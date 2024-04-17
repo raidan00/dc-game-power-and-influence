@@ -53,7 +53,7 @@ export default class{
 		this.moveController = new MoveController(player, controls, 0.5, 3);
 
 		let powerRange = 3;
-		const ring = new t.Mesh(new t.RingGeometry(0.9, 1, 30 ), new t.MeshStandardMaterial({color: "green"}) );
+		const ring = new t.Mesh(new t.RingGeometry(0.9, 1, 30 ), new t.MeshBasicMaterial({color: 0x0f9633}) );
 		ring.scale.set(powerRange,powerRange,powerRange);
 		ring.position.set(0,1.6,0)
 		ring.rotation.x = -Math.PI/2;

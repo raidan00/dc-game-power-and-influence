@@ -34,5 +34,6 @@
 		margin-bottom: 10px;
 		background: #cacff9;
 		border-radius: 10px;
+		padding: 10px;
 	}
 </style>
