@@ -23,7 +23,7 @@ export default class{
 		dc.scene.add(defaultLights);
 
 		let platSize = 50+50*lvl;
-		const platform = new t.Mesh( new t.BoxGeometry(), new t.MeshStandardMaterial({color: 0x874a1c}) );
+		const platform = new t.Mesh( new t.BoxGeometry(), new t.MeshStandardMaterial({color: 0xa15c03}) );
 		platform.scale.set(platSize, 1, platSize);
 		platform.dcData = {
 			btShape: true,
@@ -31,13 +31,17 @@ export default class{
 		};
 		dc.addObj(platform);
 
-		const voteBox = new t.Mesh( new t.BoxGeometry(), new t.MeshStandardMaterial({color: "grey"}) );
+		const voteBox = new t.Mesh( new t.BoxGeometry(), models["Vote Box"].children[0].material );
 		voteBox.scale.set(10, 1.2, 10);
 		voteBox.dcData = {
 			btShape: true,
 			mass: 0,
 		};
 		dc.addObj(voteBox);
+		let sign = models["Vote Box"].clone();
+		sign.scale.set(4,4,4);
+		sign.position.z = 4;
+		dc.scene.add(sign);
 
 		let player = models["Cross Ball"].clone();
 		player.position.set(0,1.6,0)

@@ -12,5 +12,6 @@ export function loadModels(){
 	return Promise.all([
 		loadModel("Cross Ball"),
 		loadModel("Arrow"),
+		loadModel("Vote Box"),
 	])
 }
