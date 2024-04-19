@@ -29,6 +29,7 @@ export default class {
 			this.tickBeforePhysics(deltaTime);
 			this.updateDynamic(deltaTime);
 			this.tickAfterPhysics(deltaTime);
+			this.onCollision();
 			this.renderer.render( this.scene, this.camera );
 			requestAnimationFrame(tickDispayFps);
 		};
@@ -154,6 +155,23 @@ export default class {
 			objThree.updateWorldMatrix(false, true);
 		});
 		tmpTrans.__destroy__();
+	}
+	onCollision(){
+		let numManifolds = this.dispatcher.getNumManifolds();
+		mainLoop: for ( let i = 0; i < numManifolds; i ++ ) {
+			let contactManifold = this.dispatcher.getManifoldByIndexInternal( i );
+			let numContacts = contactManifold.getNumContacts();
+			for (let j = 0; j < numContacts; j++){
+				let contactPoint = contactManifold.getContactPoint(j);
+				let distance = contactPoint.getDistance();
+				//if(distance > 0.0) continue;
+				let rb0 = Ammo.castObject(contactManifold.getBody0(), Ammo.btRigidBody);
+				let rb1 = Ammo.castObject(contactManifold.getBody1(), Ammo.btRigidBody);
+				if(rb0.objThree?.dcData?.onCollision) rb0.objThree.dcData.onCollision(rb1.objThree);
+				if(rb1.objThree?.dcData?.onCollision) rb1.objThree.dcData.onCollision(rb0.objThree);
+				continue mainLoop;
+			}
+		}
 	}
 	destroyObj(objThree){
 		if(objThree?.geometry?.dispose) objThree.geometry.dispose();

@@ -36,6 +36,9 @@ export default class{
 		voteBox.dcData = {
 			btShape: true,
 			mass: 0,
+			onCollision(objThree){
+				console.log(1);
+			},
 		};
 		dc.addObj(voteBox);
 		let sign = models["Vote Box"].clone();
