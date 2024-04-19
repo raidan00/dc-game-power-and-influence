@@ -37,6 +37,7 @@ export default class{
 			btShape: true,
 			mass: 0,
 			onCollision(objThree){
+				if(!objThree.dcData.side)return;
 				console.log(1);
 			},
 		};
