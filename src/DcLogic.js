@@ -2,7 +2,7 @@ import * as t from "three"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { ammoTmp, defaultLights, MoveController, ArrowHelper } from 'dvijcock';
 import models from "./models.js";
-import { lvl as tmpLvl} from './store.js';
+import { lvl as tmpLvl, scoreData} from './store.js';
 import {get as storeGet} from 'svelte/store';
 
 export default class{
@@ -10,6 +10,11 @@ export default class{
 	init(){
 		let dc = this.dcWorld;
 		let lvl = storeGet(tmpLvl);
+		let score = {
+			yourVoters: 0,
+			opponentVoters: 0,
+			nextUpgrade: 0,
+		};
 
 		dc.camera = new t.PerspectiveCamera( 65, 1/*dc will set acpect*/, 0.1, 30000 );
 		dc.camera.position.set(20,7,0);
@@ -38,7 +43,12 @@ export default class{
 			mass: 0,
 			onCollision(objThree){
 				if(!objThree.dcData.side)return;
-				console.log(1);
+				if(objThree.dcData.side == "my"){
+					score.yourVoters++;
+				}else{
+					score.opponentVoters++;
+				}
+				dc.removeObj(objThree);
 			},
 		};
 		dc.addObj(voteBox);
@@ -102,8 +112,15 @@ export default class{
 			this.arrowHelper = new ArrowHelper("Keep voter in your power range ring. Until he reach vote box",
 				models.Arrow, player, voter, 4);
 		}
+		this.scoreInterval = setInterval(()=>{
+			scoreData.set(score);
+			dc.scene.traverse((objThree)=>{
+				//if(objThree?.dcData?.tickBeforePhysics)arr.push(objThree);
+			});
+		}, 300);
 	}
 	destroy(){
+		clearInterval(this.scoreInterval);
 		if(this.arrowHelper)this.arrowHelper.destroy();
 		this.moveController.destroy();
 	}

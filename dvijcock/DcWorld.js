@@ -103,6 +103,16 @@ export default class {
 		}
 		addRecursion(objThree);
 	}
+	removeObj(objThree){
+		objThree.removeFromParent();
+		let removeRecursion =(objThree)=>{
+			this.destroyObj(objThree);
+			for(let i=0; i<objThree.children.length; i++){
+				removeRecursion(objThree.children[i]);
+			}
+		}
+		removeRecursion(objThree);
+	}
 	tickAfterPhysics(deltaTime){
 		let arr = [];
 		this.scene.traverse((objThree)=>{
