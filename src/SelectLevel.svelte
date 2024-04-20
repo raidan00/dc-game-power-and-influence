@@ -38,6 +38,7 @@
 		background: #cacff9;
 		border-radius: 10px;
 		padding: 10px;
+		margin: auto;
 	}
 	.levels {
 		font-size: 22px;

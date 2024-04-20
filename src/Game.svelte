@@ -4,6 +4,7 @@
 	import DcLogic from "./DcLogic.js";
 	import { loadModels } from "./models.js";
 	import Score from "./Score.svelte";
+	import WinLoose from "./WinLoose.svelte";
 
 	let gemaeLogic = undefined;
 	let domEl;
@@ -25,6 +26,7 @@
 <div bind:this={domEl} class="game">
 </div>
 <Score />
+<WinLoose />
 
 <style>
 	.game {

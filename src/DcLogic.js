@@ -2,7 +2,7 @@ import * as t from "three"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { ammoTmp, defaultLights, MoveController, ArrowHelper } from 'dvijcock';
 import models from "./models.js";
-import { lvl as tmpLvl, scoreData} from './store.js';
+import { lvl as tmpLvl, scoreData, winLooseMsg} from './store.js';
 import {get as storeGet} from 'svelte/store';
 
 export default class{
@@ -15,6 +15,7 @@ export default class{
 			opponentVoters: 0,
 			nextUpgrade: 0,
 		};
+		winLooseMsg.set("");
 
 		dc.camera = new t.PerspectiveCamera( 65, 1/*dc will set acpect*/, 0.1, 30000 );
 		dc.camera.position.set(20,7,0);
@@ -125,11 +126,16 @@ export default class{
 				forRemove.push(objThree);
 			});
 			for(let i=0; i<forRemove.length; i++) {
-				if(forRemove[i] == this.player)console.log("show winLoose");
+				if(forRemove[i] == this.player)winLooseMsg.set("You Loose");
 				dc.removeObj(forRemove[i]);
 			}
 			if(votersLeft)return;
-			console.log("show winLoose");
+			if(score.yourVoters > score.opponentVoters){
+				winLooseMsg.set("You Win");
+				if(this.arrowHelper)this.arrowHelper.destroy();
+			}else{
+				winLooseMsg.set("You Loose");
+			}
 		}, 300);
 	}
 	destroy(){

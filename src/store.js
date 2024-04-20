@@ -6,3 +6,5 @@ export const scoreData = writable({
 	opponentVoters: 0,
 	nextUpgrade: 0,
 });
+
+export const winLooseMsg = writable("You Win");
