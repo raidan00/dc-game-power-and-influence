@@ -189,7 +189,7 @@ export default class {
 		if(this.destroyed) return;
 		this.destroyed = true;
 		if(this.gameLogic.destroy)this.gameLogic.destroy();
-		this.resizer.destory();
+		this.resizer.destroy();
 		//clearInterval(this.updatePhysicsInterval);
 		this.scene.traverse((objThree)=>{
 			let notDestroy = false;

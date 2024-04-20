@@ -15,7 +15,7 @@ export default class {
 		this.dcWorld.renderer.setSize( rect.width, rect.height );
 		this.dcWorld.renderer.setPixelRatio(window.devicePixelRatio);
 	}
-	destory(){
+	destroy(){
 		this.resizeObserver.disconnect();
 		window.removeEventListener('resize', this.listener);
 	}
