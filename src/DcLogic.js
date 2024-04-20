@@ -58,6 +58,7 @@ export default class{
 		dc.scene.add(sign);
 
 		let player = models["Cross Ball"].clone();
+		this.player = player;
 		player.position.set(0,1.6,0)
 		player.dcData = {
 			btShape: new Ammo.btSphereShape(1),
@@ -114,9 +115,21 @@ export default class{
 		}
 		this.scoreInterval = setInterval(()=>{
 			scoreData.set(score);
+			let votersLeft = false;
+			let forRemove = [];
 			dc.scene.traverse((objThree)=>{
-				//if(objThree?.dcData?.tickBeforePhysics)arr.push(objThree);
+				if(objThree?.dcData?.side)votersLeft= true;
+				let pos = new t.Vector3();
+				objThree.getWorldPosition(pos);
+				if(pos.y > -30)return;
+				forRemove.push(objThree);
 			});
+			for(let i=0; i<forRemove.length; i++) {
+				if(forRemove[i] == this.player)console.log("show winLoose");
+				dc.removeObj(forRemove[i]);
+			}
+			if(votersLeft)return;
+			console.log("show winLoose");
 		}, 300);
 	}
 	destroy(){
