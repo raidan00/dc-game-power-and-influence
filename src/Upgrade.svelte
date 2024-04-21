@@ -3,7 +3,7 @@
 	import { lvl, power, influence, winLooseMsg } from "./store.js";
 
 	$power = 3;
-	$influence = 10;
+	$influence = 10000;
 	let show = true;
 	let interval;
 	onMount(async() => {

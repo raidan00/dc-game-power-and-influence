@@ -125,9 +125,26 @@ export default class{
 				createVoter(x, y);
 			}
 		}
-		let yourInfluence;
+		this.influenceInterval;
 		this.unsubscribe2 = influenceS.subscribe((value) => {
-			yourInfluence = value;
+			if(this.influenceInterval)clearInterval(this.influenceInterval);
+			this.influenceInterval = setInterval(()=>{
+				let found = false;
+				dc.scene.traverse((objThree)=>{
+					if(objThree?.dcData?.side == "neutral" && found == false){
+						found = true;
+						objThree.dcData.side = "my";
+						objThree.material.color.setHex(0xE7008F);
+						objThree.dcData.tickAfterPhysics = (delta)=>{
+							let velocity = objThree.dcData.rbody.getLinearVelocity();
+							let velVec = new t.Vector2(velocity.x(), velocity.z());
+							if(velVec.length()>3)return;
+							let pushVec = new t.Vector2(objThree.position.x, objThree.position.z).normalize().multiplyScalar(-delta*50);
+							objThree.dcData.rbody.applyCentralForce(ammoTmp.vec(pushVec.x, 0, pushVec.y));
+						}
+					}
+				});
+			}, value);
 		});
 		if(lvl != 0){
 			this.opponentInterval = setInterval(()=>{
@@ -177,6 +194,7 @@ export default class{
 		this.unsubscribe2();
 		clearInterval(this.opponentInterval);
 		clearInterval(this.scoreInterval);
+		clearInterval(this.influenceInterval);
 		if(this.arrowHelper)this.arrowHelper.destroy();
 		this.moveController.destroy();
 	}
