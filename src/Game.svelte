@@ -5,6 +5,7 @@
 	import { loadModels } from "./models.js";
 	import Score from "./Score.svelte";
 	import WinLoose from "./WinLoose.svelte";
+	import Upgrade from "./Upgrade.svelte";
 
 	let gemaeLogic = undefined;
 	let domEl;
@@ -27,6 +28,7 @@
 </div>
 <Score />
 <WinLoose />
+<Upgrade />
 
 <style>
 	.game {
