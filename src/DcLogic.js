@@ -70,7 +70,7 @@ export default class{
 			}
 		};
 		dc.addObj(player);
-		this.moveController = new MoveController(player, controls, 0.5, 3);
+		this.moveController = new MoveController(player, controls, 0.5, 4);
 
 		let powerRange = 3;
 		if(lvl == 0)powerRange=5;
@@ -85,10 +85,10 @@ export default class{
 		}
 		dc.scene.add(ring);
 
-		if(lvl == 0){
+		function createVoter(x, z){
 			const voter = new t.Mesh( new t.SphereGeometry(), new t.MeshStandardMaterial({color: "grey"}) );
 			//const voter = new t.Mesh( new t.SphereGeometry(), new t.MeshStandardMaterial({color: 0xE7008F}) );
-			voter.position.set(-1,1.2,-15);
+			voter.position.set(x,1.2,z);
 			let size = 0.7
 			voter.scale.set(size,size,size);
 			voter.dcData = {
@@ -111,8 +111,18 @@ export default class{
 			};
 			dc.addObj(voter);
 			voter.dcData.rbody.setActivationState(4);
+			return voter;
+		}
+		if(lvl == 0){
+			let voter = createVoter(-1, -15);
 			this.arrowHelper = new ArrowHelper("Keep voter in your power range ring. Until he reach vote box",
 				models.Arrow, player, voter, 4);
+		}else{
+			for(let i=1; i<lvl*40; i++){
+				let x = -platSize/2 + platSize*Math.random();
+				let y = -platSize/2 + platSize*Math.random();
+				createVoter(x, y);
+			}
 		}
 		this.scoreInterval = setInterval(()=>{
 			scoreData.set(score);
