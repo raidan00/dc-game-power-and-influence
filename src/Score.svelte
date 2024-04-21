@@ -14,9 +14,6 @@
 	<div>
 		opponent voters: {$scoreData.opponentVoters}
 	</div>
-	<div>
-		next upgrade: {$scoreData.nextUpgrade}
-	</div>
 </div>
 
 <style>

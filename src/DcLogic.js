@@ -2,18 +2,17 @@ import * as t from "three"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { ammoTmp, defaultLights, MoveController, ArrowHelper } from 'dvijcock';
 import models from "./models.js";
-import { lvl as tmpLvl, scoreData, winLooseMsg} from './store.js';
+import { lvl as lvlS, scoreData, winLooseMsg, power as powerS, influence as influenceS} from './store.js';
 import {get as storeGet} from 'svelte/store';
 
 export default class{
 	constructor(){}
 	init(){
 		let dc = this.dcWorld;
-		let lvl = storeGet(tmpLvl);
+		let lvl = storeGet(lvlS);
 		let score = {
 			yourVoters: 0,
 			opponentVoters: 0,
-			nextUpgrade: 0,
 		};
 		winLooseMsg.set("");
 
@@ -72,10 +71,7 @@ export default class{
 		dc.addObj(player);
 		this.moveController = new MoveController(player, controls, 0.5, 4);
 
-		let powerRange = 3;
-		if(lvl == 0)powerRange=5;
 		const ring = new t.Mesh(new t.RingGeometry(0.9, 1, 60 ), new t.MeshBasicMaterial({color: 0x0f9633}) );
-		ring.scale.set(powerRange,powerRange,powerRange);
 		ring.position.set(0,1.6,0)
 		ring.rotation.x = -Math.PI/2;
 		ring.dcData = {
@@ -84,6 +80,12 @@ export default class{
 			}
 		}
 		dc.scene.add(ring);
+		let power;
+		this.unsubscribe1 = powerS.subscribe((value) => {
+			if(lvl == 0) value = 5;
+			ring.scale.set(value, value, value);
+			power = value;
+		});
 
 		function createVoter(x, z){
 			const voter = new t.Mesh( new t.SphereGeometry(), new t.MeshStandardMaterial({color: "grey"}) );
@@ -97,16 +99,15 @@ export default class{
 				side: "neutral",
 				tickAfterPhysics(delta){
 					if(this.side == "opponent")return;
-					this.side = "my";
 					let distance = voter.position.distanceTo(player.position);
-					if(distance > powerRange + size)return;
+					if(distance > power + size)return;
+					this.side = "my";
 					let velocity = voter.dcData.rbody.getLinearVelocity();
 					let velVec = new t.Vector2(velocity.x(), velocity.z());
 					if(velVec.length()>3)return;
 					voter.material.color.setHex(0xE7008F);
 					let pushVec = new t.Vector2(voter.position.x, voter.position.z).normalize().multiplyScalar(-delta*50);
 					voter.dcData.rbody.applyCentralForce(ammoTmp.vec(pushVec.x, 0, pushVec.y));
-
 				},
 			};
 			dc.addObj(voter);
@@ -123,6 +124,29 @@ export default class{
 				let y = -platSize/2 + platSize*Math.random();
 				createVoter(x, y);
 			}
+		}
+		let yourInfluence;
+		this.unsubscribe2 = influenceS.subscribe((value) => {
+			yourInfluence = value;
+		});
+		if(lvl != 0){
+			this.opponentInterval = setInterval(()=>{
+				let found = false;
+				dc.scene.traverse((objThree)=>{
+					if(objThree?.dcData?.side == "neutral" && found == false){
+						found = true;
+						objThree.dcData.side = "opponent";
+						objThree.material.color.setHex(0x0c6dc2);
+						objThree.dcData.tickAfterPhysics = (delta)=>{
+							let velocity = objThree.dcData.rbody.getLinearVelocity();
+							let velVec = new t.Vector2(velocity.x(), velocity.z());
+							if(velVec.length()>3)return;
+							let pushVec = new t.Vector2(objThree.position.x, objThree.position.z).normalize().multiplyScalar(-delta*50);
+							objThree.dcData.rbody.applyCentralForce(ammoTmp.vec(pushVec.x, 0, pushVec.y));
+						}
+					}
+				});
+			}, 1000);
 		}
 		this.scoreInterval = setInterval(()=>{
 			scoreData.set(score);
@@ -149,6 +173,9 @@ export default class{
 		}, 300);
 	}
 	destroy(){
+		this.unsubscribe1();
+		this.unsubscribe2();
+		clearInterval(this.opponentInterval);
 		clearInterval(this.scoreInterval);
 		if(this.arrowHelper)this.arrowHelper.destroy();
 		this.moveController.destroy();

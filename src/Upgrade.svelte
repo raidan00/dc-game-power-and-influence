@@ -1,8 +1,6 @@
 <script>
 	import { onMount, onDestroy } from "svelte";
-	import { nextUpgrade, power, influence } from "./store.js";
-	import { lvl } from './store.js';
-
+	import { lvl, power, influence, winLooseMsg } from "./store.js";
 
 	$power = 3;
 	$influence = 10;
@@ -19,7 +17,7 @@
 </script>
 
 
-{#if show }
+{#if show && !$winLooseMsg }
 	<div class="main">
 		<div>
 			<div>Power</div>
@@ -50,6 +48,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		pointer-events: none;
 	}
 	.main > div{
 		background: grey;
@@ -57,6 +56,7 @@
 		padding: 10px;
 		margin: 10px;
 		border-radius: 5px;
+		pointer-events: all;
 	}
 	.main > div div:first-child{
 		background: white;
