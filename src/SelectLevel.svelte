@@ -25,7 +25,7 @@
 	<button on:click={()=>reset(3)}>
 		3
 	</button>
-	<button on:click={()=>reset(3)}>
+	<button on:click={()=>reset(4)}>
 		fraud
 	</button>
 </div>

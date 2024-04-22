@@ -27,7 +27,7 @@ export default class{
 
 		dc.scene.add(defaultLights);
 
-		let platSize = 50+50*lvl;
+		let platSize = 40+40*lvl;
 		const platform = new t.Mesh( new t.BoxGeometry(), new t.MeshStandardMaterial({color: 0xa15c03}) );
 		platform.scale.set(platSize, 1, platSize);
 		platform.dcData = {
@@ -47,6 +47,7 @@ export default class{
 					score.yourVoters++;
 				}else{
 					score.opponentVoters++;
+					if(lvl == 4)score.opponentVoters++;
 				}
 				dc.removeObj(objThree);
 			},
@@ -128,9 +129,11 @@ export default class{
 				this.influenceInterval = setInterval(()=>{
 					let found = false;
 					dc.scene.traverse((objThree)=>{
-						if(objThree?.dcData?.side == "neutral" && found == false){
+						if(!found && !objThree?.dcData?.influenced
+							&& (objThree?.dcData?.side == "neutral" || objThree?.dcData?.side == "my")){
 							found = true;
 							objThree.dcData.side = "my";
+							objThree.dcData.influenced = true;
 							objThree.material.color.setHex(0xE7008F);
 							objThree.dcData.tickAfterPhysics = (delta)=>{
 								let velocity = objThree.dcData.rbody.getLinearVelocity();
@@ -144,7 +147,7 @@ export default class{
 					});
 				}, value);
 			});
-			let opponentDelay = [, 5000, 4000, 3000, 2000 ];
+			let opponentDelay = [, 5000, 3500, 2000, 1000 ];
 			this.opponentInterval = setInterval(()=>{
 				let found = false;
 				dc.scene.traverse((objThree)=>{
