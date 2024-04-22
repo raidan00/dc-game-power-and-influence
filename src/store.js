@@ -8,5 +8,5 @@ export const scoreData = writable({
 export const power = writable(0);
 export const influence = writable(0);
 
-export const winLooseMsg = writable("You Win");
+export const winLooseMsg = writable("");
 
