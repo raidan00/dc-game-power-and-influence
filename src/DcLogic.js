@@ -126,7 +126,6 @@ export default class{
 			this.unsubscribe2 = influenceS.subscribe((value) => {
 				if(this.influenceInterval)clearInterval(this.influenceInterval);
 				this.influenceInterval = setInterval(()=>{
-					console.log(value);
 					let found = false;
 					dc.scene.traverse((objThree)=>{
 						if(objThree?.dcData?.side == "neutral" && found == false){
