@@ -18,8 +18,8 @@ export default class{
 
 		dc.camera = new t.PerspectiveCamera( 65, 1/*dc will set acpect*/, 0.1, 30000 );
 		dc.camera.position.set(20,7,0);
-		let controls = new OrbitControls(dc.camera, dc.renderer.domElement);
-		controls.enablePan = false;
+		this.controls = new OrbitControls(dc.camera, dc.renderer.domElement);
+		this.controls.enablePan = false;
 
 		let cameraGroup = new t.Group();	
 		cameraGroup.add(dc.camera);
@@ -70,9 +70,9 @@ export default class{
 			}
 		};
 		dc.addObj(player);
-		this.moveController = new MoveController(player, controls, 0.5, 4);
+		this.moveController = new MoveController(player, this.controls, 0.5, 4);
 
-		const ring = new t.Mesh(new t.RingGeometry(0.9, 1, 60 ), new t.MeshBasicMaterial({color: 0x0f9633}) );
+		const ring = new t.Mesh(new t.RingGeometry(0.95, 1, 60 ), new t.MeshBasicMaterial({color: 0x0f9633}) );
 		ring.position.set(0,1.6,0)
 		ring.rotation.x = -Math.PI/2;
 		ring.dcData = {
@@ -147,7 +147,7 @@ export default class{
 					});
 				}, value);
 			});
-			let opponentDelay = [, 5000, 3500, 2000, 1000 ];
+			let opponentDelay = [, 5000, 3500, 2000, 1500 ];
 			this.opponentInterval = setInterval(()=>{
 				let found = false;
 				dc.scene.traverse((objThree)=>{
@@ -192,6 +192,7 @@ export default class{
 		}, 300);
 	}
 	destroy(){
+		this.controls.dispose()
 		if(this.unsubscribe1)this.unsubscribe1();
 		if(this.unsubscribe2)this.unsubscribe2();
 		clearInterval(this.opponentInterval);
