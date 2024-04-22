@@ -1,13 +1,8 @@
 <script>
 	import { scoreData} from './store.js';
-	function back(val) {
-		$scoreData.yourVoters = 10;
-		console.log($scoreData)
-		scoreData.set($scoreData);
-	}
 </script>
 
-<div class="main" on:click={back}>
+<div class="main">
 	<div>
 		your voters: {$scoreData.yourVoters}
 	</div>

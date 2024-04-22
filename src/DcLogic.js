@@ -82,14 +82,12 @@ export default class{
 		dc.scene.add(ring);
 		let power;
 		this.unsubscribe1 = powerS.subscribe((value) => {
-			if(lvl == 0) value = 5;
 			ring.scale.set(value, value, value);
 			power = value;
 		});
 
 		function createVoter(x, z){
 			const voter = new t.Mesh( new t.SphereGeometry(), new t.MeshStandardMaterial({color: "grey"}) );
-			//const voter = new t.Mesh( new t.SphereGeometry(), new t.MeshStandardMaterial({color: 0xE7008F}) );
 			voter.position.set(x,1.2,z);
 			let size = 0.7
 			voter.scale.set(size,size,size);
@@ -124,29 +122,30 @@ export default class{
 				let y = -platSize/2 + platSize*Math.random();
 				createVoter(x, y);
 			}
-		}
-		this.influenceInterval;
-		this.unsubscribe2 = influenceS.subscribe((value) => {
-			if(this.influenceInterval)clearInterval(this.influenceInterval);
-			this.influenceInterval = setInterval(()=>{
-				let found = false;
-				dc.scene.traverse((objThree)=>{
-					if(objThree?.dcData?.side == "neutral" && found == false){
-						found = true;
-						objThree.dcData.side = "my";
-						objThree.material.color.setHex(0xE7008F);
-						objThree.dcData.tickAfterPhysics = (delta)=>{
-							let velocity = objThree.dcData.rbody.getLinearVelocity();
-							let velVec = new t.Vector2(velocity.x(), velocity.z());
-							if(velVec.length()>3)return;
-							let pushVec = new t.Vector2(objThree.position.x, objThree.position.z).normalize().multiplyScalar(-delta*50);
-							objThree.dcData.rbody.applyCentralForce(ammoTmp.vec(pushVec.x, 0, pushVec.y));
+			this.influenceInterval;
+			this.unsubscribe2 = influenceS.subscribe((value) => {
+				if(this.influenceInterval)clearInterval(this.influenceInterval);
+				this.influenceInterval = setInterval(()=>{
+					console.log(value);
+					let found = false;
+					dc.scene.traverse((objThree)=>{
+						if(objThree?.dcData?.side == "neutral" && found == false){
+							found = true;
+							objThree.dcData.side = "my";
+							objThree.material.color.setHex(0xE7008F);
+							objThree.dcData.tickAfterPhysics = (delta)=>{
+								let velocity = objThree.dcData.rbody.getLinearVelocity();
+								let velVec = new t.Vector2(velocity.x(), velocity.z());
+								if(velVec.length()>3)return;
+								let pushVec = new t.Vector2(objThree.position.x, objThree.position.z)
+									.normalize().multiplyScalar(-delta*50);
+								objThree.dcData.rbody.applyCentralForce(ammoTmp.vec(pushVec.x, 0, pushVec.y));
+							}
 						}
-					}
-				});
-			}, value);
-		});
-		if(lvl != 0){
+					});
+				}, value);
+			});
+			let opponentDelay = [, 5000, 4000, 3000, 2000 ];
 			this.opponentInterval = setInterval(()=>{
 				let found = false;
 				dc.scene.traverse((objThree)=>{
@@ -158,12 +157,13 @@ export default class{
 							let velocity = objThree.dcData.rbody.getLinearVelocity();
 							let velVec = new t.Vector2(velocity.x(), velocity.z());
 							if(velVec.length()>3)return;
-							let pushVec = new t.Vector2(objThree.position.x, objThree.position.z).normalize().multiplyScalar(-delta*50);
+							let pushVec = new t.Vector2(objThree.position.x, objThree.position.z)
+								.normalize().multiplyScalar(-delta*50);
 							objThree.dcData.rbody.applyCentralForce(ammoTmp.vec(pushVec.x, 0, pushVec.y));
 						}
 					}
 				});
-			}, 1000);
+			}, opponentDelay[lvl]);
 		}
 		this.scoreInterval = setInterval(()=>{
 			scoreData.set(score);
@@ -190,8 +190,8 @@ export default class{
 		}, 300);
 	}
 	destroy(){
-		this.unsubscribe1();
-		this.unsubscribe2();
+		if(this.unsubscribe1)this.unsubscribe1();
+		if(this.unsubscribe2)this.unsubscribe2();
 		clearInterval(this.opponentInterval);
 		clearInterval(this.scoreInterval);
 		clearInterval(this.influenceInterval);

@@ -2,14 +2,26 @@
 	import { onMount, onDestroy } from "svelte";
 	import { lvl, power, influence, winLooseMsg } from "./store.js";
 
-	$power = 3;
-	$influence = 10000;
+	let powers = [5, 10, 20, 25, 30, 31,32,33,34,36,37];
+	let powerI = 0;
+	function getNextPower(){
+		if(powerI>powers.length-1)powerI = powers.length-1;
+		return powers[powerI];
+	}
+	let influences = [10000, 5000, 2500, 1700, 1000, 700, 690, 670, 660, 650, 640];
+	let influenceI = 0;
+	function getNextInfluence(){
+		if(influenceI>influences.length-1)powerI = influences.length-1;
+		return influences[influenceI];
+	}
+	$power = getNextPower();
+	$influence = getNextInfluence();
 	let show = true;
 	let interval;
 	onMount(async() => {
 		interval = setInterval(()=>{
 			show = true;
-		}, 1000)
+		}, 10000)
 	});
 	onDestroy(() => {
 		clearInterval(interval);
@@ -17,21 +29,21 @@
 </script>
 
 
-{#if show && !$winLooseMsg }
+{#if show && !$winLooseMsg && $lvl != -0}
 	<div class="main">
 		<div>
 			<div>Power</div>
 			<div>Voters moving to vote box until he in your power ring</div>
-			<button on:click={()=>{$power = $power*2; show=false} }>
-				Upgrade to {$power*2}
+			<button on:click={()=>{ powerI++; $power = getNextPower(); show=false;} }>
+				Upgrade to {getNextPower().toFixed(2)}
 			</button>
 
 		</div>
 		<div>
 			<div>Influence</div>
 			<div>Random voter move to vote box until he vote</div>
-			<button on:click={()=>{$influence = $influence/2; show=false} }>
-				Upgrade to {($influence/2).toFixed(2)}
+			<button on:click={()=>{ influenceI++; $influence = getNextInfluence(); show=false} }>
+				Upgrade to {getNextInfluence().toFixed(2)}
 			</button>
 		</div>
 	</div>
