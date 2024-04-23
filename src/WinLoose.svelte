@@ -1,6 +1,7 @@
 <script>
 	import { winLooseMsg } from './store.js';
 	import { lvl } from './store.js';
+	winLooseMsg.set("")
 	function back(val) {
 		lvl.set(-1);
 	}

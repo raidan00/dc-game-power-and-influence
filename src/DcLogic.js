@@ -14,7 +14,6 @@ export default class{
 			yourVoters: 0,
 			opponentVoters: 0,
 		};
-		winLooseMsg.set("");
 
 		dc.camera = new t.PerspectiveCamera( 65, 1/*dc will set acpect*/, 0.1, 30000 );
 		dc.camera.position.set(20,7,0);
