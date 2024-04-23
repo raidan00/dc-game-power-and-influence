@@ -31,7 +31,8 @@ export default class {
 			this.tickAfterPhysics(deltaTime);
 			this.onCollision();
 			this.renderer.render( this.scene, this.camera );
-			requestAnimationFrame(tickDispayFps);
+			setTimeout(tickDispayFps, 16); //temporary bugfix
+			//requestAnimationFrame(tickDispayFps);
 		};
 		tickDispayFps();
 	}
